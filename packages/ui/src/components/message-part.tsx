@@ -779,7 +779,7 @@ export function UserMessageDisplay(props: {
           <Show when={text()}>
             <>
               <div data-slot="user-message-body">
-                <div data-slot="user-message-text" data-queued={props.queued ? "" : undefined}>
+                <div data-slot="user-message-text" data-queued={props.queued ? "" : undefined} dir="auto">
                   <HighlightedText text={text()} references={inlineFiles()} agents={agents()} />
                 </div>
                 <GrowBox animate={!!props.animate} open={!!props.queued}>
