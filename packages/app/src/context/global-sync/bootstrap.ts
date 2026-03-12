@@ -40,10 +40,12 @@ export async function bootstrapGlobal(input: {
   formatMoreCount: (count: number) => string
   setGlobalStore: SetStoreFunction<GlobalStore>
 }) {
-  const health = await input.globalSDK.global
-    .health()
-    .then((x) => x.data)
-    .catch(() => undefined)
+  const HEALTH_CHECK_TIMEOUT_MS = 8000
+  const timeout = new Promise<undefined>((resolve) => setTimeout(() => resolve(undefined), HEALTH_CHECK_TIMEOUT_MS))
+  const health = await Promise.race([
+    input.globalSDK.global.health().then((x) => x.data).catch(() => undefined),
+    timeout,
+  ])
   if (!health?.healthy) {
     showToast({
       variant: "error",
