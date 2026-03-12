@@ -2,6 +2,7 @@
 import { render } from "solid-js/web"
 import { createResource, createSignal, onCleanup, onMount, Show } from "solid-js"
 import { AppBaseProviders, AppInterface, PlatformProvider, ServerConnection, type Platform } from "@opencode-ai/app"
+import { Spinner } from "@opencode-ai/ui/spinner"
 import { showToast } from "@opencode-ai/ui/toast"
 import { requestPermissions } from "@tauri-apps/api/core"
 import { impactFeedback, notificationFeedback } from "@tauri-apps/plugin-haptics"
@@ -297,7 +298,14 @@ const App = () => {
           }}
           onStop={() => void stopVoiceInput()}
         />
-        <Show when={!defaultConfig.loading}>
+        <Show
+          when={!defaultConfig.loading}
+          fallback={
+            <div class="size-full flex items-center justify-center">
+              <Spinner />
+            </div>
+          }
+        >
           <Show when={defaultConfig() || completedConfig()} fallback={<Onboarding onComplete={handleOnboardingComplete} />}>
             <AppInterface
               {...(() => {

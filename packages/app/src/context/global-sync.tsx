@@ -7,6 +7,7 @@ import type {
   ProviderListResponse,
   Todo,
 } from "@opencode-ai/sdk/v2/client"
+import { Spinner } from "@opencode-ai/ui/spinner"
 import { showToast } from "@opencode-ai/ui/toast"
 import { getFilename } from "@opencode-ai/util/path"
 import {
@@ -431,7 +432,13 @@ const GlobalSyncContext = createContext<ReturnType<typeof createGlobalSync>>()
 export function GlobalSyncProvider(props: ParentProps) {
   const value = createGlobalSync()
   return (
-    <Switch>
+    <Switch
+      fallback={
+        <div class="size-full flex items-center justify-center">
+          <Spinner />
+        </div>
+      }
+    >
       <Match when={value.ready}>
         <GlobalSyncContext.Provider value={value}>{props.children}</GlobalSyncContext.Provider>
       </Match>
